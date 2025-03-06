@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import type { HospitalData } from "./types.ts";
 
 const fetchExampleData = async (): Promise<HospitalData[]> => {
+
+  const API_URL = import.meta.env.VITE_RUTA_API;
+
   try {
-    const response = await fetch("https://bzk5nkrf-8080.uks1.devtunnels.ms/api");
+    const response = await fetch(`${API_URL}/api`);
     if (!response.ok) {
       throw new Error(`Error HTTP: ${response.status}`);
     }

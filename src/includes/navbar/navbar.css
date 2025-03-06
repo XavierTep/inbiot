@@ -1,45 +1,137 @@
 .navbar {
-    background-color: white;
-    
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-lista {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.navbar-item {
+    justify-content: space-between;
+    margin: 40px;
+    height: 80px;
+    padding: 10px 20px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: relative;
-}
-
-.navbar-link {
-    padding: 10px 10px;
+  }
+  
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  /* Botón hamburguesa: oculto en escritorio */
+  .navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .hamburger {
+    width: 25px;
+    height: 3px;
+    background-color: black;
+    margin: 4px 0;
+    transition: 0.4s;
+  }
+  
+  /* Menú en desktop: lista horizontal */
+  .navbar-list {
+    margin-left: 100px;
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+  }
+  
+  .navbar-link {
     text-decoration: none;
     color: black;
-    transition: all 0.1s ease;
-    display: inline-block;
-    border-radius: 50%;
-    border: 1px solid transparent
-}
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 20px;
+  }
+  
+  .navbar-link.active {
+    background-color: #cce5ff;
+    color: #007bff;
+    font-weight: bold;
+  }
 
-.navbar-link:hover {
-    background-color: #ffffff;
-    color: rgb(20, 71, 165);
-    border: 1px solid blue;
+  .logout-button-desktop{
+    display: none;
+  }
+
+  .logout-button {
+    background-color: rgb(255, 45, 45);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+
+  .logout-button:hover {
+    background-color: white;
+    border: 1px solid rgb(255, 45, 45);
+    color: rgb(255, 45, 45);
+  }
+  
+  /* Ajustes para dispositivos móviles */
+  @media (max-width: 768px) {
+    .navbar {
+      margin: 20px;
+      flex-wrap: wrap;
+    }
     
-    border-radius: 5px
-}
+  .logout-button-desktop{
+    display: block;
+  }
+  
+    /* Mostrar botón hamburguesa */
+    .navbar-toggle {
+      display: flex;
+    }
+  
+    /* Ocultar menú de navegación en móvil por defecto */
+    .navbar-list {
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      display: none;
+      margin: 0;
+      padding: 10px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 0 0 20px 20px;
+      z-index: 1;
+    }
+  
+    /* Mostrar menú cuando se active la clase "active" */
+    .navbar-list.active {
+      display: flex;
+      
+    }
+  
+    .navbar-item {
+        width: 100%;
+      padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
 
-.navbar-link.active {
-    border: 1px solid blue;
-    color: rgb(20, 71, 165);
-    background-color: #90cdf4;
-   
-    border-radius: 5px
-}
-
+    }
+  
+    .logout-button {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: none;
+    }
+  }
+  

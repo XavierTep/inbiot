@@ -95,14 +95,14 @@ const Indicadores: React.FC<IndicadoresProps> = ({ id}) => {
 
   const [loading, setLoading] = useState(true);
   const [updateTime, setUpdateTime] = useState<string | null>(null);
-
+  const API_URL = import.meta.env.VITE_RUTA_API;
   useEffect(() => {
     if (!id) return;
 
     const fetchIndicadores = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`https://bzk5nkrf-8080.uks1.devtunnels.ms/registro/all/${id}`, {
+        const response = await fetch(`${API_URL}/registro/all/${id}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });

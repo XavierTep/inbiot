@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import ProgressCircle from "./progress-circle";
 
+
 interface ParametrosProps {
   id?: string;
 }
 
 const Parametros: React.FC<ParametrosProps> = ({ id }) => {
+ 
   const [parametros, setParametros] = useState([
     { key: "temperature", valor: 21.3, unidad: "°C", nombre: "Temperatura", info: "Temperatura ambiente en grados Celsius" },
     { key: "humidity", valor: 52, unidad: "%", nombre: "Humedad", info: "Porcentaje de humedad relativa en el aire" },
     { key: "co2", valor: 803, unidad: "ppm", nombre: "CO₂", color: "warning", info: "Concentración de dióxido de carbono en partes por millón" },
-    { key: "formaldehyde", valor: 50, unidad: "ppb", nombre: "Formaldehído", info: "Concentración de formaldehído en partes por billón" },
+    { key: "formaldehyde", valor: 50, unidad: "ppb", nombre: "Formaldehído", info: "Concentración de formaldehído en partes por millón" },
     { key: "vocs", valor: 104, unidad: "INDEX", nombre: "TVOC", info: "Índice de compuestos orgánicos volátiles totales" },
     { key: "pm1", valor: 2, unidad: "μg/m³", nombre: "PM1.0", info: "Partículas en suspensión con diámetro menor a 1.0 micrómetros" },
     { key: "pm25", valor: 2, unidad: "μg/m³", nombre: "PM2.5", info: "Partículas en suspensión con diámetro menor a 2.5 micrómetros" },
@@ -23,6 +25,8 @@ const Parametros: React.FC<ParametrosProps> = ({ id }) => {
 
   const [loading, setLoading] = useState(true);
   const [updateTime, setUpdateTime] = useState<string | null>(null);
+  const API_URL = import.meta.env.VITE_RUTA_API;
+  console.log(`${API_URL}/registro/all/${id}`);
 
   useEffect(() => {
     if (!id) return;
@@ -30,7 +34,7 @@ const Parametros: React.FC<ParametrosProps> = ({ id }) => {
     const fetchParametros = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`https://bzk5nkrf-8080.uks1.devtunnels.ms/registro/all/${id}`, {
+        const response = await fetch(`${API_URL}/registro/all/${id}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -38,7 +42,7 @@ const Parametros: React.FC<ParametrosProps> = ({ id }) => {
         if (!response.ok) throw new Error("Error en la respuesta del servidor");
 
         const data = await response.json();
-
+        console.log({data});
         // **Tomar el último registro del array**
         const ultimoRegistro = data.at(-1); // Equivalente a data[data.length - 1]
 
@@ -50,10 +54,21 @@ const Parametros: React.FC<ParametrosProps> = ({ id }) => {
 
         // **Actualizar solo los valores sin modificar la estructura original**
         setParametros((prevParametros) =>
-          prevParametros.map((parametro) => ({
-            ...parametro,
-            valor: ultimoRegistro[parametro.key] ?? parametro.valor, // Si no existe en la API, mantiene el valor inicial
-          }))
+          prevParametros.map((parametro) => {
+            // Se obtiene el nuevo valor o se conserva el valor inicial si no existe en el último registro
+            let nuevoValor = ultimoRegistro[parametro.key] ?? parametro.valor;
+        
+            // Si la key es 'formaldehyde', se divide el valor entre 1000
+            if (parametro.key === "formaldehyde") {
+              nuevoValor = nuevoValor / 1000;
+              parametro.unidad = "ppm";
+            }
+        
+            return {
+              ...parametro,
+              valor: nuevoValor,
+            };
+          })
         );
       } catch (error) {
         console.error("Error obteniendo los parámetros:", error);
@@ -73,7 +88,7 @@ const Parametros: React.FC<ParametrosProps> = ({ id }) => {
         {loading ? (
           <p className="text-center text-gray-500">Cargando datos...</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {parametros.map((parametro, index) => (
               <ProgressCircle
                 key={index}

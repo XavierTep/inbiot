@@ -9,12 +9,14 @@ import { Suspense, useState } from "react";
 const items = [
   { name: "Parámetros", path: "parametros" },
   { name: "Indicadores", path: "indicadores" },
-  { name: "Gráfica", path: "grafica" },
+  // { name: "Gráfica", path: "grafica" },
 ];
 
 const Submenu: React.FC = () => {
   const { id } = useParams(); // Obtiene el ID de la URL
-
+const handleConstruccion = () => {
+    alert("En construcción"); 
+}
   const [tag, setTag] = useState<any>('parametros');
   const handleClick = (tag: any) => {
     setTag(tag);
@@ -34,10 +36,14 @@ const Submenu: React.FC = () => {
       {/* Menú de navegación */}
       <div className="menu">
         {items.map((item) => (
-          <button key={item.path} className="menu-item" onClick={() => handleClick(item.path)}>
+         
+          <button key={item.path} className= {`menu-item `} onClick={() => handleClick(item.path)}>
             {item.name}
           </button>
         ))}
+        <button className="menu-item" onClick ={handleConstruccion}>
+           Grafica
+        </button>
       </div>
 
       {/* Renderiza el componente correspondiente */}
